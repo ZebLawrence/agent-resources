@@ -3,6 +3,22 @@
     "playwright": {
       "command": "npx",
       "args": ["-y", "@playwright/mcp@latest"]
-    }
+    },
+		"io.github.ChromeDevTools/chrome-devtools-mcp": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"chrome-devtools-mcp"
+			],
+			"env": {},
+			"type": "stdio"
+		},
+		"remotion-documentation": {
+			"command": "npx",
+			"args": [
+				"@remotion/mcp@latest"
+			],
+			"type": "stdio"
+		}
   }
 }
