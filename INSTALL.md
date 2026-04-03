@@ -12,7 +12,8 @@ This repo acts as both a **plugin** and a **marketplace** for Claude Code and Gi
 | Playwright MCP | `.mcp.json` | Browser automation via Playwright |
 | Plugin manifest | `plugin.json` | Shared manifest for both platforms |
 | Claude marketplace | `.claude-plugin/marketplace.json` | Claude Code marketplace registry |
-| Copilot marketplace | `.github/plugin/marketplace.json` | Copilot marketplace registry |
+| Copilot/VS Code marketplace | `.github/plugin/marketplace.json` | Copilot CLI + VS Code marketplace registry |
+| VS Code workspace config | `.vscode/settings.json` | Auto-registers marketplace when repo is open in VS Code |
 
 ---
 
@@ -110,20 +111,66 @@ MCP servers in `.mcp.json` are installed when the plugin is installed. To verify
 
 ## GitHub Copilot in VS Code
 
-VS Code does not use the plugin/marketplace system. Skills and agents must be installed manually, and MCP servers are configured separately.
+VS Code supports the same plugin/marketplace system. Skills, agents, and MCP servers all install through it.
 
-### MCP servers (VS Code)
+### Option A — Register the marketplace in user settings (recommended)
 
-**Option A — Workspace config** (per-project, committed to the repo):
+This makes the marketplace available across all your VS Code instances on this machine.
 
-The repo already includes `.vscode/mcp.json`. If you open this repo in VS Code, Playwright MCP is available automatically.
+1. Open VS Code settings: `Ctrl+Shift+P` → **Preferences: Open User Settings (JSON)**
+2. Add the marketplace to `chat.plugins.marketplaces`:
 
-For other projects, copy `.vscode/mcp.json` into the project root or add the server to your user settings (see Option B).
+```json
+"chat.plugins.marketplaces": [
+    "ZebLawrence/agent-resources"
+]
+```
 
-**Option B — User settings** (all projects on this machine):
+3. Open the Extensions panel (`Ctrl+Shift+X`) and search `@agentPlugins`
+4. Find **shared-agent-resources** and click **Install**
 
-1. Open VS Code settings: `Ctrl+Shift+P` → `Preferences: Open User Settings (JSON)`
-2. Add the following inside the root JSON object:
+All skills, agents, and MCP servers (including Playwright) are now active.
+
+### Option B — Install directly from source
+
+Skip the marketplace and install the plugin in one step:
+
+1. Open the Command Palette: `Ctrl+Shift+P`
+2. Run **Chat: Install Plugin From Source**
+3. Enter: `https://github.com/ZebLawrence/agent-resources`
+
+### Option C — Workspace auto-discovery (for repos that reference this marketplace)
+
+The repo already includes `.vscode/settings.json` with `extraKnownMarketplaces` and `enabledPlugins`. Any project that has these workspace settings will automatically register the marketplace and prompt to enable the plugin when Copilot Chat opens. To use this pattern in your own projects, copy the `.vscode/settings.json` from this repo into the target project:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ZebLawrence-agent-resources": {
+      "source": {
+        "source": "github",
+        "repo": "ZebLawrence/agent-resources"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "shared-agent-resources@ZebLawrence-agent-resources": true
+  }
+}
+```
+
+VS Code will show a notification on the first chat message prompting you to install the plugin.
+
+### Managing installed plugins (VS Code)
+
+- **View installed:** Extensions panel → **Agent Plugins - Installed**
+- **Enable/Disable:** Right-click in the installed view or toggle in the Chat Customizations editor
+- **Update:** `Ctrl+Shift+P` → **Extensions: Check for Extension Updates** (or auto-updates every 24h)
+- **Uninstall:** Right-click in **Agent Plugins - Installed** → Uninstall
+
+### MCP servers (VS Code — manual fallback)
+
+MCP servers are included automatically when the plugin is installed. If you need to add Playwright manually without the plugin system, open user settings and add:
 
 ```json
 "mcp": {
@@ -137,33 +184,7 @@ For other projects, copy `.vscode/mcp.json` into the project root or add the ser
 }
 ```
 
-3. Reload VS Code. Copilot will prompt you to start the MCP server on first use.
-
-### Skills and agents (VS Code)
-
-VS Code Copilot reads skills and agents from:
-- **Project-level:** `.github/skills/<skill-name>/SKILL.md`
-- **Personal:** `~/.copilot/skills/<skill-name>/SKILL.md` (Windows: `%USERPROFILE%\.copilot\skills\`)
-
-To install skills from this repo manually:
-
-```bash
-# PowerShell — install all skills to your personal Copilot folder
-$dest = "$env:USERPROFILE\.copilot\skills"
-New-Item -ItemType Directory -Force -Path $dest
-git clone https://github.com/ZebLawrence/agent-resources /tmp/agent-resources
-Copy-Item -Recurse /tmp/agent-resources/skills/* $dest
-```
-
-Or clone the repo and symlink the skills folder for automatic updates:
-
-```powershell
-# Clone once
-git clone https://github.com/ZebLawrence/agent-resources "$env:USERPROFILE\agent-resources"
-
-# Symlink (run as Administrator)
-New-Item -ItemType Junction -Path "$env:USERPROFILE\.copilot\skills" -Target "$env:USERPROFILE\agent-resources\skills"
-```
+VS Code will prompt you to start the server on first use. The repo's `.vscode/mcp.json` also configures Playwright for the workspace scope when this repo is open.
 
 ---
 
@@ -172,7 +193,7 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.copilot\skills" -Target "$e
 1. Copy `skills/template-skill/` to a new folder: `skills/my-new-skill/`
 2. Edit `skills/my-new-skill/SKILL.md` — update `name`, `description`, and content
 3. Commit and push to GitHub
-4. On each machine, run `/plugin update shared-agent-resources` (Claude/Copilot CLI) or re-pull and re-copy (VS Code)
+4. On each machine, run `/plugin update shared-agent-resources` (Claude CLI / Copilot CLI) or `Ctrl+Shift+P` → **Extensions: Check for Extension Updates** (VS Code)
 
 ## Adding new MCP servers
 
@@ -193,6 +214,6 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.copilot\skills" -Target "$e
 
 ---
 
-## Notes on accuracy
+## Notes
 
-The Claude Code plugin/marketplace system (`/plugin` commands) is a relatively new feature. If a command fails, verify the current syntax in the [Claude Code docs](https://docs.anthropic.com/claude-code). The Copilot CLI plugin system mirrors Claude's closely — both use the same `plugin.json` and `marketplace.json` schema.
+The Claude Code plugin/marketplace system (`/plugin` commands) is a relatively new feature. If a command fails, verify the current syntax in the [Claude Code docs](https://docs.anthropic.com/claude-code). The VS Code plugin system is documented at [code.visualstudio.com/docs/copilot/customization/agent-plugins](https://code.visualstudio.com/docs/copilot/customization/agent-plugins).

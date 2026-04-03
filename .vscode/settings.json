@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "ZebLawrence-agent-resources": {
+      "source": {
+        "source": "github",
+        "repo": "ZebLawrence/agent-resources"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "shared-agent-resources@ZebLawrence-agent-resources": true
+  }
+}
