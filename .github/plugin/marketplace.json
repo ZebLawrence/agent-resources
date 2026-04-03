@@ -1,0 +1,29 @@
+{
+  "name": "ZebLawrence-agent-resources",
+  "owner": {
+    "name": "ZebLawrence",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Personal shared agent resources — skills, agents, and MCP servers for GitHub Copilot",
+    "version": "1.0.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "shared-agent-resources",
+      "source": ".",
+      "description": "Shared skills, agents, and MCP server configurations",
+      "version": "1.0.0",
+      "author": {
+        "name": "ZebLawrence",
+        "url": "https://github.com/ZebLawrence"
+      },
+      "license": "MIT",
+      "keywords": ["mcp", "playwright", "skills", "agents"],
+      "skills": "skills/",
+      "agents": "agents/",
+      "mcpServers": ".mcp.json"
+    }
+  ]
+}

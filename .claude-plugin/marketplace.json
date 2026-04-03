@@ -1,0 +1,28 @@
+{
+  "name": "ZebLawrence-agent-resources",
+  "owner": {
+    "name": "ZebLawrence",
+    "url": "https://github.com/ZebLawrence"
+  },
+  "metadata": {
+    "description": "Personal shared agent resources — skills, agents, and MCP servers for Claude Code",
+    "version": "1.0.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "shared-agent-resources",
+      "source": ".",
+      "description": "Shared skills, agents, and MCP server configurations",
+      "version": "1.0.0",
+      "author": {
+        "name": "ZebLawrence",
+        "url": "https://github.com/ZebLawrence"
+      },
+      "license": "MIT",
+      "skills": "skills/",
+      "agents": "agents/",
+      "mcpServers": ".mcp.json"
+    }
+  ]
+}
