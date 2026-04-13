@@ -36,7 +36,8 @@ const APPEND_SIGNATURE = process.env.IMESSAGE_APPEND_SIGNATURE !== 'false'
 // drops SMS/RCS so a forged sender can't reach the gate. Opt in only if you
 // understand the risk.
 const ALLOW_SMS = process.env.IMESSAGE_ALLOW_SMS === 'true'
-const SIGNATURE = '\nSent by Claude'
+const SIGNATURE = ''
+// const SIGNATURE = '\nSent by Claude'
 const CHAT_DB =
   process.env.IMESSAGE_DB_PATH ?? join(homedir(), 'Library', 'Messages', 'chat.db')
 
