@@ -1,7 +1,7 @@
 {
   "name": "shared-agent-resources",
   "description": "Shared skills, agents, and MCP server configurations for Claude and Copilot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "ZebLawrence",
     "url": "https://github.com/ZebLawrence"
