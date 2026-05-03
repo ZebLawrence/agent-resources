@@ -26,6 +26,11 @@
           "type": "stdio"
         }
       }
+    },
+    {
+      "name": "zeb-message",
+      "source": "./plugins/zeb-message",
+      "description": "Custom iMessage channel for Claude Code — reads chat.db directly, sends via AppleScript."
     }
   ]
 }

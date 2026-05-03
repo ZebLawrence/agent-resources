@@ -9,7 +9,6 @@
   "homepage": "https://github.com/ZebLawrence/agent-resources",
   "repository": "https://github.com/ZebLawrence/agent-resources",
   "license": "MIT",
-  "skills": "skills/",
-  "agents": "agents/",
-  "mcpServers": ".mcp.json"
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json"
 }

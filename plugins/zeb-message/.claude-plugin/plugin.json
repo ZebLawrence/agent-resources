@@ -1,0 +1,12 @@
+{
+  "name": "zeb-message",
+  "description": "Custom iMessage channel for Claude Code — reads chat.db directly, sends via AppleScript. Built-in access control; manage pairing, allowlists, and policy via /zeb-message:access.",
+  "version": "0.2.0",
+  "keywords": [
+    "imessage",
+    "messaging",
+    "channel",
+    "mcp",
+    "zeb-message"
+  ]
+}
